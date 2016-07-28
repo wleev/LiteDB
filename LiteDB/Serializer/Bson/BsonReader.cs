@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 
 namespace LiteDB
@@ -123,6 +124,21 @@ namespace LiteDB
             else if (type == 0x12) // Int64
             {
                 return reader.ReadInt64();
+            }
+            else if (type == 0x13)
+            {
+                return reader.ReadSingle();
+            }
+            else if (type == 0x14)
+            {
+                var src = reader.ReadBytes(16);
+
+                return new decimal(
+                    BitConverter.ToInt32(src, 0),
+                    BitConverter.ToInt32(src, 4),
+                    BitConverter.ToInt32(src, 8),
+                    src[15] == (byte)128,
+                    src[14]);
             }
             else if (type == 0xFF) // MinKey
             {

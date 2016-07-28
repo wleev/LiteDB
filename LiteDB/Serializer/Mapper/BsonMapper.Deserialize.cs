@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace LiteDB
@@ -50,11 +50,13 @@ namespace LiteDB
             typeof(String),
             typeof(Int32),
             typeof(Int64),
+            typeof(Decimal),
             typeof(Boolean),
             typeof(Guid),
             typeof(DateTime),
             typeof(Byte[]),
             typeof(ObjectId),
+            typeof(Single),
             typeof(Double)
         };
 
@@ -65,8 +67,6 @@ namespace LiteDB
             typeof(UInt16),
             typeof(UInt32),
             typeof(UInt64),
-            typeof(Single),
-            typeof(Decimal),
             typeof(Char),
             typeof(Byte)
         };
@@ -195,7 +195,7 @@ namespace LiteDB
         {
 #if PCL
 			var typeInfo = type.GetTypeInfo();
-            var itemType = typeInfo.GenericTypeArguments.FirstOrDefault() 
+            var itemType = typeInfo.GenericTypeArguments.FirstOrDefault()
                    ?? typeInfo.ImplementedInterfaces.First(i => i.GetTypeInfo().IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GetTypeInfo().GenericTypeArguments.First();
 #else
             var itemType = type.GetGenericArguments().FirstOrDefault() ?? type.GetInterfaces().First(i => i.GetTypeInfo().IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>)).GetGenericArguments().First();

@@ -57,9 +57,21 @@ namespace LiteDB
             this.RawValue = value;
         }
 
+        public BsonValue(Single value)
+        {
+            this.Type = BsonType.Single;
+            this.RawValue = value;
+        }
+
         public BsonValue(Double value)
         {
             this.Type = BsonType.Double;
+            this.RawValue = value;
+        }
+
+        public BsonValue(Decimal value)
+        {
+            this.Type = BsonType.Decimal;
             this.RawValue = value;
         }
 
@@ -124,7 +136,9 @@ namespace LiteDB
             if (value == null) this.Type = BsonType.Null;
             else if (value is Int32) this.Type = BsonType.Int32;
             else if (value is Int64) this.Type = BsonType.Int64;
+            else if (value is Single) this.Type = BsonType.Single;
             else if (value is Double) this.Type = BsonType.Double;
+            else if (value is Decimal) this.Type = BsonType.Decimal;
             else if (value is String) this.Type = BsonType.String;
             else if (value is Dictionary<string, BsonValue>) this.Type = BsonType.Document;
             else if (value is List<BsonValue>) this.Type = BsonType.Array;
@@ -207,9 +221,19 @@ namespace LiteDB
             get { return this.IsNumber ? Convert.ToInt64(this.RawValue) : default(Int64); }
         }
 
+        public float AsSingle
+        {
+            get { return this.IsNumber ? Convert.ToSingle(this.RawValue) : default(Single); }
+        }
+
         public double AsDouble
         {
             get { return this.IsNumber ? Convert.ToDouble(this.RawValue) : default(Double); }
+        }
+
+        public decimal AsDecimal
+        {
+            get { return this.IsNumber ? Convert.ToDecimal(this.RawValue) : default(Decimal); }
         }
 
         public DateTime AsDateTime
@@ -256,14 +280,24 @@ namespace LiteDB
             get { return this.Type == BsonType.Int64; }
         }
 
+        public bool IsSingle
+        {
+            get { return this.Type == BsonType.Single; }
+        }
+
         public bool IsDouble
         {
             get { return this.Type == BsonType.Double; }
         }
 
+        public bool IsDecimal
+        {
+            get { return this.Type == BsonType.Decimal; }
+        }
+
         public bool IsNumber
         {
-            get { return this.IsInt32 || this.IsInt64 || this.IsDouble; }
+            get { return this.IsInt32 || this.IsInt64 || this.IsSingle || this.IsDouble || this.IsDecimal; }
         }
 
         public bool IsBinary
@@ -334,6 +368,17 @@ namespace LiteDB
             return new BsonValue { Type = BsonType.Int64, RawValue = value };
         }
 
+        //Single
+        public static implicit operator Single(BsonValue value)
+        {
+            return (Single)value.RawValue;
+        }
+
+        public static implicit operator BsonValue(Single value)
+        {
+            return new BsonValue { Type = BsonType.Single, RawValue = value };
+        }
+
         // Double
         public static implicit operator Double(BsonValue value)
         {
@@ -344,6 +389,17 @@ namespace LiteDB
         public static implicit operator BsonValue(Double value)
         {
             return new BsonValue { Type = BsonType.Double, RawValue = value };
+        }
+
+        //Decimal
+        public static implicit operator Decimal(BsonValue value)
+        {
+            return (Decimal)value.RawValue;
+        }
+
+        public static implicit operator BsonValue(Decimal value)
+        {
+            return new BsonValue { Type = BsonType.Decimal, RawValue = value };
         }
 
         // String
@@ -578,7 +634,9 @@ namespace LiteDB
 
                 case BsonType.Int32: this.Length = 4; break;
                 case BsonType.Int64: this.Length = 8; break;
+                case BsonType.Single: this.Length = 4; break;
                 case BsonType.Double: this.Length = 8; break;
+                case BsonType.Decimal: this.Length = 16; break;
 
                 case BsonType.String: this.Length = Encoding.UTF8.GetByteCount((string)this.RawValue); break;
 

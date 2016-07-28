@@ -19,6 +19,8 @@ namespace LiteDB.Tests
             doc["EmptyString"] = "";
             doc["maxDate"] = DateTime.MaxValue;
             doc["minDate"] = DateTime.MinValue;
+            doc["MyFloat"] = 3.14f;
+            doc["decimal"] = new Decimal(3.14);
 
             doc.Set("Customer.Address.Street", "Av. Caçapava, Nº 122");
 
@@ -60,6 +62,9 @@ namespace LiteDB.Tests
 
             Assert.AreEqual(DateTime.MaxValue, doc["maxDate"].AsDateTime);
             Assert.AreEqual(DateTime.MinValue, doc["minDate"].AsDateTime);
+
+            Assert.AreEqual(new Decimal(3.14), doc["decimal"].AsDecimal);
+            Assert.AreEqual(3.14f, doc["MyFloat"].AsSingle);
 
             Assert.AreEqual(o["Items"].AsArray.Count, doc["Items"].AsArray.Count);
             Assert.AreEqual(o["Items"].AsArray[0].AsDocument["Unit"].AsDouble, doc["Items"].AsArray[0].AsDocument["Unit"].AsDouble);

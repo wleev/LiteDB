@@ -11,20 +11,22 @@
 
         Int32 = 2,
         Int64 = 3,
-        Double = 4,
+        Single = 4,
+        Double = 5,
+        Decimal = 6,
 
-        String = 5,
+        String = 7,
 
-        Document = 6,
-        Array = 7,
+        Document = 8,
+        Array = 9,
 
-        Binary = 8,
-        ObjectId = 9,
-        Guid = 10,
+        Binary = 10,
+        ObjectId = 11,
+        Guid = 12,
 
-        Boolean = 11,
-        DateTime = 12,
+        Boolean = 13,
+        DateTime = 14,
 
-        MaxValue = 13
+        MaxValue = 15
     }
 }
